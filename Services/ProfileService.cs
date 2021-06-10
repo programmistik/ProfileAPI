@@ -19,30 +19,37 @@ namespace ProfileAPI.Services
             _profile = database.GetCollection<Profile>(settings.ProfileCollectionName);
         }
 
-        public List<Profile> Get() =>
-            _profile.Find(prof => true).ToList();
-
-        public Profile Get(string id) =>
-            _profile.Find<Profile>(prof => prof.AppUserId == id).FirstOrDefault();
-
-        public Profile Create(Profile prof)
+        public async Task<List<Profile>> GetAsync()
         {
-            _profile.InsertOne(prof);
+            var coll = await _profile.FindAsync(prof => true);
+            return await coll.ToListAsync();
+        }
+
+        public async Task<Profile> GetAsync(string id)
+        {
+            var coll = await _profile.FindAsync(prof => prof.AppUserId == id);
+            return await coll.FirstOrDefaultAsync();
+        }
+
+        public async Task<Profile> CreateAsync(Profile prof)
+        {
+            await _profile.InsertOneAsync(prof);
             return prof;
         }
 
-        public void Update(string id, Profile profIn)
+        public async Task UpdateAsync(string id, Profile profIn) =>
+            await _profile.ReplaceOneAsync(prof => prof.AppUserId == id, profIn);
+
+        public async Task RemoveAsync(Profile profIn) =>
+            await _profile.DeleteOneAsync(prof => prof.AppUserId == profIn.Id);
+
+        public async Task RemoveAsync(string id) =>
+            await _profile.DeleteOneAsync(prof => prof.AppUserId == id);
+
+        public async Task<List<Profile>> SearchAsync(string str)
         {
-            _profile.ReplaceOne(prof => prof.AppUserId == id, profIn);
+            var coll = await _profile.FindAsync(prof => prof.Name.Contains(str));
+            return await coll.ToListAsync();
         }
-
-        public void Remove(Profile profIn) =>
-            _profile.DeleteOne(prof => prof.AppUserId == profIn.Id);
-
-        public void Remove(string id) =>
-            _profile.DeleteOne(prof => prof.AppUserId == id);
-
-        public List<Profile> Search(string str) =>
-            _profile.Find(prof => prof.Name.Contains(str)).ToList();
     }
 }

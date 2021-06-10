@@ -7,14 +7,14 @@ namespace ProfileAPI.Services
 {
     public interface IProfileService
     {
-        List<Profile> Get();
-        Profile Get(string id);
+        Task<List<Profile>> GetAsync();
+        Task<Profile> GetAsync(string id);
 
-        Profile Create(Profile prof);
-        void Update(string id, Profile profIn);
-        List<Profile> Search(string str);
+        Task<Profile> CreateAsync(Profile prof);
+        Task UpdateAsync(string id, Profile profIn);
+        Task<List<Profile>> SearchAsync(string str);
 
-        void Remove(Profile profIn);
-        void Remove(string id);
+        Task RemoveAsync(Profile profIn);
+        Task RemoveAsync(string id);
     }
 }

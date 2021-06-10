@@ -20,57 +20,49 @@ namespace ProfileAPI.Controllers
             }
 
             [HttpGet]
-            public ActionResult<List<Profile>> Get() =>
-                _profileService.Get();
+            public async Task<ActionResult<List<Profile>>> GetAsync() =>
+                await _profileService.GetAsync();
 
             [HttpGet("{AppUserId}", Name = "GetProfile")]
-            public ActionResult<Profile> Get(string AppUserId)
+            public async Task<ActionResult<Profile>> GetAsync(string AppUserId)
             {
-                var profile = _profileService.Get(AppUserId);
-               
+                var profile = await _profileService.GetAsync(AppUserId);
 
-            if (profile == null)
-                {
-                    return NotFound();
-                }
+                if (profile == null)
+                        return NotFound();
 
                 return profile;
             }
 
             [HttpPost]
-            public ActionResult<Profile> Create(Profile profile)
+            public async Task<ActionResult<Profile>> CreateAsync(Profile profile)
             {
-                _profileService.Create(profile);
+                await _profileService.CreateAsync(profile);
 
                 return CreatedAtRoute("GetProfile", new { id = profile.Id.ToString() }, profile);
             }
 
             [HttpPut("{id}")]
-            public IActionResult Update(string id, Profile profile)
+            public async Task<IActionResult> UpdateAsync(string id, Profile profile)
             {
-             //   var Profile = _profileService.Get(id);
 
                 if (profile == null)
-                {
                     return NotFound();
-                }
 
-                _profileService.Update(id, profile);
+                await _profileService.UpdateAsync(id, profile);
 
                 return NoContent();
             }
 
             [HttpDelete("{id}")]
-            public IActionResult Delete(string id)
+            public async Task<IActionResult> DeleteAsync(string id)
             {
-                var profile = _profileService.Get(id);
+                var profile = await _profileService.GetAsync(id);
 
                 if (profile == null)
-                {
                     return NotFound();
-                }
 
-                _profileService.Remove(profile.Id);
+                await _profileService.RemoveAsync(profile.Id);
 
                 return NoContent();
             }
