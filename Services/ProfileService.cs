@@ -48,7 +48,7 @@ namespace ProfileAPI.Services
 
         public async Task<List<Profile>> SearchAsync(string str)
         {
-            var coll = await _profile.FindAsync(prof => prof.Name.Contains(str));
+            var coll = await _profile.FindAsync(prof => prof.Name.ToLower().Contains(str.ToLower()));
             return await coll.ToListAsync();
         }
     }
