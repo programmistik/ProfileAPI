@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 
 namespace ProfileAPI
 {
+    [BsonIgnoreExtraElements]
     public class Profile
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        [BsonElement("_id")]
         public string Id { get; set; }
 
         public string IdentityId { get; set; }

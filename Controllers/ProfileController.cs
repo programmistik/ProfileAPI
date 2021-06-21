@@ -33,9 +33,14 @@ namespace ProfileAPI.Controllers
 
                 return profile;
             }
+             
+        
 
-            [HttpPost]
-            public async Task<ActionResult<Profile>> CreateAsync(Profile profile)
+            
+
+
+        [HttpPost]
+            public async Task<ActionResult<Profile>> PostAsync(Profile profile)
             {
                 await _profileService.CreateAsync(profile);
 
